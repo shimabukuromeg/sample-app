@@ -21,6 +21,7 @@ const Subject = styled.h1`
 const UserContainer = styled.div`
   margin-top: 32px;
   display: flex;
+  align-items: center;
 `;
 
 const UserId = styled.div`
@@ -36,37 +37,45 @@ const Content = styled.div`
   margin-top: 32px;
 `;
 
+const UserText = styled.div`
+  margin-left: 12px;
+`;
+
+const IconImage = styled.img`
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+`
+
 const ArticlePage: NextPage = () => {
     const router = useRouter()
     const { articleId } = router.query
-
     const { loading, error, data } = useGetArticleQuery({
         variables: {
             id: articleId as string,
         },
     })
-
     if (loading) {
         return <p>...loading</p>
     }
     if (error) {
         return <p>{error.toString()}</p>
     }
-
     if (!data || !data.articles_by_pk) {
         return <Error statusCode={404} />
     }
-
     const { user, subject, content } = data.articles_by_pk
-
     return (
         <Container>
             <Subject>{subject}</Subject>
             <UserContainer>
                 <div>
+                    <IconImage src="/profile.jpeg" />
+                </div>
+                <UserText>
                     <UserId>{user.displayId}</UserId>
                     <UserName>{user.displayName}</UserName>
-                </div>
+                </UserText>
             </UserContainer>
             <Content>{content}</Content>
         </Container>
